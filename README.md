@@ -42,8 +42,11 @@ HTML5
 CSS3
 
 JavaScript (Fetch API)
+
 📂 Project Structure
+
 apicrud/
+
 │
 ├── server.js
 ├── package.json
