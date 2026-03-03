@@ -43,17 +43,20 @@ CSS3
 
 JavaScript (Fetch API)
 
-📂 Project Structure
+## 📂 Project Structure
 
+```
 apicrud/
-
 │
-├── server.js
-├── package.json
-├── .env
-├── .gitignore
-└── public/
-    └── index.html
+├── server.js          # Main backend server file
+├── package.json       # Project dependencies & scripts
+├── .env               # Environment variables (not pushed to GitHub)
+├── .gitignore         # Files ignored by Git
+│
+└── public/            # Frontend folder
+    └── index.html     # Main HTML file (UI)
+```
+
 
 ⚙️ Installation & Setup
 
