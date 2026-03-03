@@ -53,11 +53,14 @@ apicrud/
     └── index.html
 
 ⚙️ Installation & Setup
+
 1️⃣ Clone Repository
 git clone https://github.com/belimirfan/apicrud.git
 cd apicrud
+
 2️⃣ Install Dependencies
 npm install
+
 3️⃣ Create .env File
 
 Create a file named .env in root folder and add:
@@ -70,7 +73,8 @@ npm start
 Open browser:
 
 http://localhost:5000
+
 👨‍💻 Author
 
-Irfan Belim
+**Irfan Belim**
 GitHub: https://github.com/belimirfan
