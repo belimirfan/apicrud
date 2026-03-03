@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee CRUD</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        input,
+        select {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid gray;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Employee Management System</h2>
+
+    <input type="hidden" id="empId">
+
+    <input type="text" id="name" placeholder="Name">
+    <input type="text" id="city" placeholder="City">
+
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+    </select>
+
+    <input type="text" id="address" placeholder="Address">
+    <input type="text" id="mobile" placeholder="Mobile">
+    <input type="number" id="salary" placeholder="Salary">
+
+    <button onclick="saveEmployee()">Save</button>
+    <button onclick="clearForm()">Clear</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Mobile</th>
+                <th>Salary</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="employeeList"></tbody>
+    </table>
+
+    <script>
+
+        const api = "http://localhost:5000";
+        let employeeData = [];
+
+        // Load Employees
+        async function loadEmployees() {
+            const res = await fetch(`${api}/getEmployees`);
+            employeeData = await res.json();
+
+            let output = "";
+
+            employeeData.forEach(emp => {
+                output += `
+        <tr>
+            <td>${emp.name}</td>
+            <td>${emp.city}</td>
+            <td>${emp.gender}</td>
+            <td>${emp.address}</td>
+            <td>${emp.mobile}</td>
+            <td>${emp.salary}</td>
+            <td>
+                <button onclick="editEmployee('${emp._id}')">Edit</button>
+                <button onclick="deleteEmployee('${emp._id}')">Delete</button>
+            </td>
+        </tr>`;
+            });
+
+            document.getElementById("employeeList").innerHTML = output;
+        }
+
+        // Save or Update
+        async function saveEmployee() {
+
+            const id = document.getElementById("empId").value;
+
+            const employee = {
+                name: document.getElementById("name").value,
+                city: document.getElementById("city").value,
+                gender: document.getElementById("gender").value,
+                address: document.getElementById("address").value,
+                mobile: document.getElementById("mobile").value,
+                salary: document.getElementById("salary").value
+            };
+
+            if (id) {
+                await fetch(`${api}/updateEmployee/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(employee)
+                });
+            } else {
+                await fetch(`${api}/addEmployee`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(employee)
+                });
+            }
+
+            clearForm();
+            loadEmployees();
+        }
+
+        // Edit
+        function editEmployee(id) {
+
+            const emp = employeeData.find(e => e._id === id);
+
+            if (!emp) {
+                alert("Employee not found!");
+                return;
+            }
+
+            document.getElementById("empId").value = emp._id;
+            document.getElementById("name").value = emp.name;
+            document.getElementById("city").value = emp.city;
+            document.getElementById("gender").value = emp.gender;
+            document.getElementById("address").value = emp.address;
+            document.getElementById("mobile").value = emp.mobile;
+            document.getElementById("salary").value = emp.salary;
+        }
+
+        // Delete
+        async function deleteEmployee(id) {
+            await fetch(`${api}/deleteEmployee/${id}`, {
+                method: "DELETE"
+            });
+            loadEmployees();
+        }
+
+        // Clear Form
+        function clearForm() {
+            document.getElementById("empId").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("city").value = "";
+            document.getElementById("gender").value = "";
+            document.getElementById("address").value = "";
+            document.getElementById("mobile").value = "";
+            document.getElementById("salary").value = "";
+        }
+
+        // Load data initially
+        loadEmployees();
+
+    </script>
+
+</body>
+
+</html>
